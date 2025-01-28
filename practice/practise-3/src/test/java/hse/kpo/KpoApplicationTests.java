@@ -53,4 +53,22 @@ class KpoApplicationTests {
         customerStorage.getCustomers().stream().map(Customer::toString).forEach(System.out::println);
     }
 
+    @Test
+    @DisplayName("Тест создания машины")
+    void carFabric() {
+
+        var levitatingCarFactory = new LevitatingCarFactory();
+        var levitating_car = levitatingCarFactory.createCar(EmptyEngineParams.DEFAULT, 1);
+        System.out.println(levitating_car);
+
+        var pedalCarFactory = new PedalCarFactory();
+        var pedal_car = pedalCarFactory.createCar(new PedalEngineParams(6), 2);
+        System.out.println(pedal_car);
+
+        var handCarFactory = new HandCarFactory();
+        var hand_car = handCarFactory.createCar(EmptyEngineParams.DEFAULT, 3);
+        System.out.println(hand_car);
+
+    }
+
 }
