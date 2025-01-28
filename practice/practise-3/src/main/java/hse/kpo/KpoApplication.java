@@ -12,9 +12,15 @@ import hse.kpo.services.HseCarService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+/**
+ * Main class.
+ */
 @SpringBootApplication
 public class KpoApplication {
 
+    /**
+     * Main function.
+     */
     public static void main(String[] args) {
         SpringApplication.run(KpoApplication.class, args);
 
@@ -27,18 +33,19 @@ public class KpoApplication {
 
         var carService = new CarService();
 
-        var hseCarService = new HseCarService(carService, customerStorage);
-        var pedalCarFactory = new PedalCarFactory();
-        var handCarFactory = new HandCarFactory();
         var levitatingCarFactory = new LevitatingCarFactory();
-
         carService.addCar(levitatingCarFactory, EmptyEngineParams.DEFAULT);
+
+        var pedalCarFactory = new PedalCarFactory();
         carService.addCar(pedalCarFactory, new PedalEngineParams(6));
         carService.addCar(pedalCarFactory, new PedalEngineParams(6));
+
+        var handCarFactory = new HandCarFactory();
         carService.addCar(handCarFactory, EmptyEngineParams.DEFAULT);
 
         customerStorage.getCustomers().stream().map(Customer::toString).forEach(System.out::println);
 
+        var hseCarService = new HseCarService(carService, customerStorage);
         hseCarService.sellCars();
 
         customerStorage.getCustomers().stream().map(Customer::toString).forEach(System.out::println);

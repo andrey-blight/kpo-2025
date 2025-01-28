@@ -31,21 +31,19 @@ class KpoApplicationTests {
     @DisplayName("Тест загрузки контекста")
     void contextLoads() {
 
-
-        var pedalCarFactory = new PedalCarFactory();
-
-        var handCarFactory = new HandCarFactory();
-
-        var levitatingCarFactory = new LevitatingCarFactory();
-
         customerStorage.addCustomer(new Customer("Ivan1", 6, 4, 100));
         customerStorage.addCustomer(new Customer("Maksim", 4, 6, 200));
         customerStorage.addCustomer(new Customer("Petya", 6, 6, 301));
         customerStorage.addCustomer(new Customer("Nikita", 4, 4, 400));
 
+        var levitatingCarFactory = new LevitatingCarFactory();
         carService.addCar(levitatingCarFactory, EmptyEngineParams.DEFAULT);
+
+        var pedalCarFactory = new PedalCarFactory();
         carService.addCar(pedalCarFactory, new PedalEngineParams(6));
         carService.addCar(pedalCarFactory, new PedalEngineParams(6));
+
+        var handCarFactory = new HandCarFactory();
         carService.addCar(handCarFactory, EmptyEngineParams.DEFAULT);
 
         customerStorage.getCustomers().stream().map(Customer::toString).forEach(System.out::println);

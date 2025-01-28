@@ -1,6 +1,6 @@
 package hse.kpo.domains;
 
-import hse.kpo.interfaces.IEngine;
+import hse.kpo.interfaces.InterfaceEngine;
 import lombok.ToString;
 
 /**
@@ -8,7 +8,7 @@ import lombok.ToString;
  */
 @ToString
 
-public class HandEngine implements IEngine {
+public class HandEngine implements InterfaceEngine {
     /**
      * Check can customer own this engine.
      */
