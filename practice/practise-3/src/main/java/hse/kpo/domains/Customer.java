@@ -13,12 +13,15 @@ public class Customer {
 
     private final int handPower;
 
+    private final int iq;
+
     @Setter
     private Car car;
 
-    public Customer(String name, int legPower, int handPower) {
+    public Customer(String name, int legPower, int handPower, int iq) {
         this.name = name;
         this.legPower = legPower;
         this.handPower = handPower;
+        this.iq = iq;
     }
 }
