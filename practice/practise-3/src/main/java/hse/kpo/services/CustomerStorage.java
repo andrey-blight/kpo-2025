@@ -2,11 +2,13 @@ package hse.kpo.services;
 
 import hse.kpo.domains.Customer;
 import hse.kpo.interfaces.ICustomerProvider;
-import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.stereotype.Component;
 
+/**
+ * List of customers.
+ */
 @Component
 public class CustomerStorage implements ICustomerProvider {
     private List<Customer> customers = new ArrayList<>();

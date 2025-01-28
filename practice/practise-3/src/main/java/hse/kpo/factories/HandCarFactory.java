@@ -5,6 +5,10 @@ import hse.kpo.domains.HandEngine;
 import hse.kpo.interfaces.ICarFactory;
 import hse.kpo.params.EmptyEngineParams;
 
+
+/**
+ * Factory for hand cars.
+ */
 public class HandCarFactory implements ICarFactory<EmptyEngineParams> {
     @Override
     public Car createCar(EmptyEngineParams carParams, int carNumber) {

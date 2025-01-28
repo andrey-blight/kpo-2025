@@ -3,6 +3,9 @@ package hse.kpo.domains;
 import hse.kpo.interfaces.IEngine;
 import lombok.ToString;
 
+/**
+ * Levitating engine (can own only with iq > 300).
+ */
 @ToString
 public class LevitatingEngine implements IEngine {
     @Override

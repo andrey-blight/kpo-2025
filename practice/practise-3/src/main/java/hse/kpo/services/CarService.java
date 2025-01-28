@@ -4,11 +4,13 @@ import hse.kpo.domains.Car;
 import hse.kpo.domains.Customer;
 import hse.kpo.interfaces.ICarFactory;
 import hse.kpo.interfaces.ICarProvider;
-import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.stereotype.Component;
 
+/**
+ * Sell car class.
+ */
 @Component
 public class CarService implements ICarProvider {
 
@@ -28,8 +30,10 @@ public class CarService implements ICarProvider {
         return firstCar.orElse(null);
     }
 
-    public <TParams> void addCar(ICarFactory<TParams> carFactory, TParams carParams)
-    {
+    /**
+     * add car to list of cars.
+     */
+    public <T> void addCar(ICarFactory<T> carFactory, T carParams) {
         // создаем автомобиль из переданной фабрики
         var car = carFactory.createCar(
                 carParams, // передаем параметры

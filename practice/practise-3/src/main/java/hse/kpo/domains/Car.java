@@ -4,16 +4,19 @@ import hse.kpo.interfaces.IEngine;
 import lombok.Getter;
 import lombok.ToString;
 
+/**
+ * Car class with engine.
+ */
 @ToString
 public class Car {
 
     private IEngine engine;
 
     @Getter
-    private int VIN;
+    private int vin;
 
-    public Car(int VIN, IEngine engine) {
-        this.VIN = VIN;
+    public Car(int vin, IEngine engine) {
+        this.vin = vin;
         this.engine = engine;
     }
 

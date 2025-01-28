@@ -5,6 +5,9 @@ import hse.kpo.domains.LevitatingEngine;
 import hse.kpo.interfaces.ICarFactory;
 import hse.kpo.params.EmptyEngineParams;
 
+/**
+ * Factory for levitating cars.
+ */
 public class LevitatingCarFactory implements ICarFactory<EmptyEngineParams> {
     @Override
     public Car createCar(EmptyEngineParams carParams, int carNumber) {

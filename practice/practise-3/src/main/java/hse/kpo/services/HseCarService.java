@@ -2,11 +2,13 @@ package hse.kpo.services;
 
 import hse.kpo.interfaces.ICarProvider;
 import hse.kpo.interfaces.ICustomerProvider;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
-
+/**
+ * Seller class.
+ */
 @Component
 @RequiredArgsConstructor
 public class HseCarService {
@@ -15,6 +17,9 @@ public class HseCarService {
 
     private final ICustomerProvider customerProvider;
 
+    /**
+     * Sell car for all customers.
+     */
     public void sellCars() {
         // получаем список покупателей
         var customers = customerProvider.getCustomers();
