@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class CustomerStorage implements InterfaceCustomerProvider {
-    private List<Customer> customers = new ArrayList<>();
+    private final List<Customer> customers = new ArrayList<>();
 
     @Override
     public List<Customer> getCustomers() {

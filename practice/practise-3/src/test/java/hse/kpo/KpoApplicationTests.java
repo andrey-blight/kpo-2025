@@ -15,6 +15,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import static org.mockito.Mockito.*;
+
 @SpringBootTest
 class KpoApplicationTests {
 
@@ -87,9 +89,83 @@ class KpoApplicationTests {
         var handCarFactory = new HandCarFactory();
         var fabric_hand_car = handCarFactory.createCar(EmptyEngineParams.DEFAULT, 3);
 
-        var real_hand_car = new Car(2, new HandEngine());
+        var real_hand_car = new Car(3, new HandEngine());
 
         Assertions.assertEquals(fabric_hand_car, real_hand_car);
+
+    }
+
+    @Test
+    @DisplayName("Тест добавления машины в сервис машин")
+    void addCarToServiceTest() {
+
+        var spyCarService = spy(carService);
+        var handCarFactory = new HandCarFactory();
+
+        doNothing().when(spyCarService).addCar(handCarFactory, EmptyEngineParams.DEFAULT);
+        spyCarService.addCar(handCarFactory, EmptyEngineParams.DEFAULT);
+
+        verify(spyCarService, times(1)).addCar(handCarFactory, EmptyEngineParams.DEFAULT);
+
+    }
+
+    @Test
+    @DisplayName("Тест получения машины из сервиса машин")
+    void getFromCarServiceTest() {
+
+        var mockCarService = mock(CarService.class);
+
+        var customer = new Customer("Ivan1", 6, 4, 100);
+
+        when(mockCarService.takeCar(customer)).thenReturn(null);
+
+        mockCarService.takeCar(customer);
+
+        verify(mockCarService, times(1)).takeCar(customer);
+
+    }
+
+    @Test
+    @DisplayName("Тест добавления покупателя в список покупателей")
+    void addToCustomersTest() {
+
+        var mockCustomerStorage = mock(CustomerStorage.class);
+
+        var customer = new Customer("Ivan1", 6, 4, 100);
+
+        doNothing().when(mockCustomerStorage).addCustomer(customer);
+
+        mockCustomerStorage.addCustomer(customer);
+
+        verify(mockCustomerStorage, times(1)).addCustomer(customer);
+
+    }
+
+    @Test
+    @DisplayName("Тест получения всех покупателей")
+    void getAllCustomersTest() {
+
+        var mockCustomerStorage = mock(CustomerStorage.class);
+
+        when(mockCustomerStorage.getCustomers()).thenReturn(null);
+
+        mockCustomerStorage.getCustomers();
+
+        verify(mockCustomerStorage, times(1)).getCustomers();
+
+    }
+
+    @Test
+    @DisplayName("Тест продажи машин клиентам")
+    void sellAllCarsTest() {
+
+        var mockCustomerStorage = mock(HseCarService.class);
+
+        doNothing().when(mockCustomerStorage).sellCars();
+
+        mockCustomerStorage.sellCars();
+
+        verify(mockCustomerStorage, times(1)).sellCars();
 
     }
 
