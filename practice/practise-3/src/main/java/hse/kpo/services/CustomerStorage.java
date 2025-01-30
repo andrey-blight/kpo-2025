@@ -1,15 +1,17 @@
 package hse.kpo.services;
 
 import hse.kpo.domains.Customer;
-import hse.kpo.interfaces.ICustomerProvider;
-import org.springframework.stereotype.Component;
-
+import hse.kpo.interfaces.InterfaceCustomerProvider;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.stereotype.Component;
 
+/**
+ * List of customers.
+ */
 @Component
-public class CustomerStorage implements ICustomerProvider {
-    private List<Customer> customers = new ArrayList<>();
+public class CustomerStorage implements InterfaceCustomerProvider {
+    private final List<Customer> customers = new ArrayList<>();
 
     @Override
     public List<Customer> getCustomers() {

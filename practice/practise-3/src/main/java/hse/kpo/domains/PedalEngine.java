@@ -1,12 +1,16 @@
 package hse.kpo.domains;
 
-import hse.kpo.interfaces.IEngine;
+import hse.kpo.interfaces.InterfaceEngine;
 import lombok.Getter;
 import lombok.ToString;
 
+/**
+ * Pedal engine class (can own only with leg power > 5).
+ */
 @ToString
 @Getter
-public class PedalEngine implements IEngine {
+
+public class PedalEngine implements InterfaceEngine {
     private final int size;
 
     @Override
