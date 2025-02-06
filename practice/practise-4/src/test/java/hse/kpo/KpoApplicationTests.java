@@ -18,10 +18,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.Mockito.*;
-
 @SpringBootTest
-class KpoApplicationTests {
+class HseCarServiceTests {
 
     @Autowired
     private CarService carService;
@@ -34,13 +32,17 @@ class KpoApplicationTests {
 
 
     @Test
-    @DisplayName("Тест загрузки контекста")
+    @DisplayName("Тест продажи всех автомобилей клиентам")
     void contextLoads() {
+        var ivan = new Customer("Ivan", 6, 4, 100);
+        var maxim = new Customer("Maxim", 4, 6, 200);
+        var petya = new Customer("Petya", 6, 6, 301);
+        var nikita = new Customer("Nikita", 4, 4, 400);
 
-        customerStorage.addCustomer(new Customer("Ivan1", 6, 4, 100));
-        customerStorage.addCustomer(new Customer("Maksim", 4, 6, 200));
-        customerStorage.addCustomer(new Customer("Petya", 6, 6, 301));
-        customerStorage.addCustomer(new Customer("Nikita", 4, 4, 400));
+        customerStorage.addCustomer(ivan);
+        customerStorage.addCustomer(maxim);
+        customerStorage.addCustomer(petya);
+        customerStorage.addCustomer(nikita);
 
         var levitatingCarFactory = new LevitatingCarFactory();
         carService.addCar(levitatingCarFactory, EmptyEngineParams.DEFAULT);
@@ -52,58 +54,17 @@ class KpoApplicationTests {
         var handCarFactory = new HandCarFactory();
         carService.addCar(handCarFactory, EmptyEngineParams.DEFAULT);
 
-        customerStorage.getCustomers().stream().map(Customer::toString).forEach(System.out::println);
-
         hseCarService.sellCars();
 
-        customerStorage.getCustomers().stream().map(Customer::toString).forEach(System.out::println);
+        var ivan_car = new Car(2, new PedalEngine(6));
+        var maxim_car = new Car(4, new HandEngine());
+        var petya_car = new Car(1, new LevitatingEngine());
+
+        Assertions.assertEquals(ivan.getCar(), ivan_car);
+        Assertions.assertEquals(maxim.getCar(), maxim_car);
+        Assertions.assertEquals(petya.getCar(), petya_car);
+        Assertions.assertNull(nikita.getCar());
     }
-
-
-    @Test
-    @DisplayName("Тест добавления покупателя в список покупателей")
-    void addToCustomersTest() {
-
-        var mockCustomerStorage = mock(CustomerStorage.class);
-
-        var customer = new Customer("Ivan1", 6, 4, 100);
-
-        doNothing().when(mockCustomerStorage).addCustomer(customer);
-
-        mockCustomerStorage.addCustomer(customer);
-
-        verify(mockCustomerStorage, times(1)).addCustomer(customer);
-
-    }
-
-    @Test
-    @DisplayName("Тест получения всех покупателей")
-    void getAllCustomersTest() {
-
-        var mockCustomerStorage = mock(CustomerStorage.class);
-
-        when(mockCustomerStorage.getCustomers()).thenReturn(null);
-
-        mockCustomerStorage.getCustomers();
-
-        verify(mockCustomerStorage, times(1)).getCustomers();
-
-    }
-
-    @Test
-    @DisplayName("Тест продажи машин клиентам")
-    void sellAllCarsTest() {
-
-        var mockCustomerStorage = mock(HseCarService.class);
-
-        doNothing().when(mockCustomerStorage).sellCars();
-
-        mockCustomerStorage.sellCars();
-
-        verify(mockCustomerStorage, times(1)).sellCars();
-
-    }
-
 }
 
 @SpringBootTest
@@ -210,6 +171,25 @@ class CarServiceTests {
         var customer_car = carService.takeCar(customer);
 
         Assertions.assertNull(customer_car);
+    }
+
+}
+
+@SpringBootTest
+class CustomerStorageTests {
+
+    @Test
+    @DisplayName("Тест добавления клиента в список клиентов")
+    void addCustomerTest() {
+        var customerStorage = new CustomerStorage();
+        var customer = new Customer("Ivan1", 6, 6, 100);
+
+        customerStorage.addCustomer(customer);
+
+        List<Customer> real_customers = new ArrayList<>();
+        real_customers.add(customer);
+
+        Assertions.assertEquals(real_customers, customerStorage.getCustomers());
     }
 
 }
