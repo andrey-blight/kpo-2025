@@ -2,10 +2,8 @@ package hse.kpo.services;
 
 import hse.kpo.domains.Customer;
 import hse.kpo.interfaces.InterfaceCustomerProvider;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import lombok.Getter;
 import org.springframework.stereotype.Component;
 
