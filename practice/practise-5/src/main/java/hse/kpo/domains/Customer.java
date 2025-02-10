@@ -22,6 +22,9 @@ public class Customer {
     @Setter
     private Car car;
 
+    @Setter
+    private Catamaran catamaran;
+
     /**
      * Create customer with param.
      */
