@@ -1,6 +1,5 @@
 package org.example.services;
 
-import org.example.domains.Clinic;
 import org.example.interfaces.InterfaceAnimalFabric;
 import org.springframework.stereotype.Component;
 

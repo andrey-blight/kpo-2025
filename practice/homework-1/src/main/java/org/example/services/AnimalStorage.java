@@ -2,7 +2,6 @@ package org.example.services;
 
 import lombok.Getter;
 import org.example.domains.Animal;
-import org.example.domains.Clinic;
 import org.example.domains.Mammal;
 import org.example.interfaces.InterfaceAnimalFabric;
 import org.springframework.stereotype.Component;

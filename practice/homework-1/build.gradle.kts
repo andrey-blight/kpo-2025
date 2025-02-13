@@ -25,9 +25,6 @@ dependencies {
     implementation("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
 
-    // Spring Context (без версии, так как Spring Boot сам управляет)
-    implementation("org.springframework:spring-context")
-
     // Для тестов
     testImplementation("org.mockito:mockito-core")
 }

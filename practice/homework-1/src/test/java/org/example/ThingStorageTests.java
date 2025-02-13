@@ -1,20 +1,30 @@
+package org.example;
+
 import org.example.domains.Computer;
 import org.example.domains.Table;
 import org.example.services.ThingStorage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
+
+@SpringBootTest
 public class ThingStorageTests {
+    @Autowired
+    private ThingStorage storage;
+
     @Test
+    @DirtiesContext
     @DisplayName("Тест создания компьютера")
     public void testCreateComputer() {
-        var storage = new ThingStorage();
         storage.addThing("computer");
 
         var example = new Computer(0);
@@ -23,9 +33,9 @@ public class ThingStorageTests {
     }
 
     @Test
+    @DirtiesContext
     @DisplayName("Тест создания стола")
     public void testCreateTable() {
-        var storage = new ThingStorage();
         storage.addThing("table");
 
         var example = new Table(0);
@@ -34,9 +44,9 @@ public class ThingStorageTests {
     }
 
     @Test
+    @DirtiesContext
     @DisplayName("Тест получения отчета")
     public void testGetInfo() {
-        var storage = new ThingStorage();
         storage.addThing("table");
         storage.addThing("table");
         storage.addThing("computer");
@@ -49,30 +59,30 @@ public class ThingStorageTests {
 
         try {
             storage.print_info();
-            assertEquals("Total things: 3\n" +
-                    "\n" +
-                    "All things:\n" +
-                    "number: 0\n" +
-                    "type: Table\n" +
-                    "\n" +
-                    "number: 1\n" +
-                    "type: Table\n" +
-                    "\n" +
-                    "number: 2\n" +
-                    "type: Computer\n\n", outContent.toString());
+            assertEquals("""
+                    Total things: 3
+                    
+                    All things:
+                    number: 0
+                    type: Table
+                    
+                    number: 1
+                    type: Table
+                    
+                    number: 2
+                    type: Computer
+                    
+                    """, outContent.toString());
         } finally {
             System.setOut(originalOut);
         }
     }
 
     @Test
+    @DirtiesContext
     @DisplayName("Тест создания неизвестного предмета")
     public void testCreateUnknown() {
-        var storage = new ThingStorage();
-
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            storage.addThing("chair");
-        });
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> storage.addThing("chair"));
 
         assertEquals("Неизвестная вещь: chair", exception.getMessage());
     }

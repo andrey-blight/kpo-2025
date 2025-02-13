@@ -1,5 +1,6 @@
-package org.example.domains;
+package org.example.services;
 
+import org.example.domains.Animal;
 import org.springframework.stereotype.Component;
 
 @Component

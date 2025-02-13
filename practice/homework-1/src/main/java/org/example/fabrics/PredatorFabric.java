@@ -5,7 +5,9 @@ import org.example.domains.Wolf;
 import org.example.domains.Tiger;
 import org.example.interfaces.InterfaceAnimalFabric;
 import org.example.params.PredatorParams;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PredatorFabric implements InterfaceAnimalFabric<PredatorParams> {
 
     public Animal createAnimal(PredatorParams params) {
