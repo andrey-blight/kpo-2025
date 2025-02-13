@@ -14,6 +14,6 @@ public class Mammal extends Animal {
     @Override
     public String toString() {
         return super.toString() +
-                "\nkindness: " + kindness;
+                "\nkindness: " + this.getKindness();
     }
 }

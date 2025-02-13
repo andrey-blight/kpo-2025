@@ -23,7 +23,7 @@ public class Animal implements InterfaceAlive {
 
     @Override
     public String toString() {
-        return "food Consumption: " + foodConsumption +
-                "\nname: " + name;
+        return "food Consumption: " + this.getFoodConsumption() +
+                "\nname: " + this.getName();
     }
 }

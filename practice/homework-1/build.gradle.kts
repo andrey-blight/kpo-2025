@@ -1,6 +1,8 @@
 plugins {
     id("java")
     id("io.freefair.lombok") version "8.6"
+    id("org.springframework.boot") version "3.2.2"  // Подключаем Spring Boot
+    id("io.spring.dependency-management") version "1.1.4" // Управление зависимостями Spring
 }
 
 group = "org.example"
@@ -11,11 +13,22 @@ repositories {
 }
 
 dependencies {
+    // Spring Boot Starter Test (без версии!)
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+    // JUnit 5
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
-    implementation("org.projectlombok:lombok:1.18.30")
-    annotationProcessor("org.projectlombok:lombok:1.18.30")
-    implementation("org.springframework:spring-context:5.3.23")
+
+    // Lombok (для основного кода и аннотаций)
+    implementation("org.projectlombok:lombok")
+    annotationProcessor("org.projectlombok:lombok")
+
+    // Spring Context (без версии, так как Spring Boot сам управляет)
+    implementation("org.springframework:spring-context")
+
+    // Для тестов
+    testImplementation("org.mockito:mockito-core")
 }
 
 tasks.test {

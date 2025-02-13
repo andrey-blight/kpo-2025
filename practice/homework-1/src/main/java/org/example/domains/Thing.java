@@ -16,6 +16,6 @@ public class Thing implements InterfaceInventory {
 
     @Override
     public String toString() {
-        return "number: " + number;
+        return "number: " + getNumber();
     }
 }

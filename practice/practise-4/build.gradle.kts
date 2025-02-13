@@ -14,7 +14,7 @@ checkstyle {
 	isIgnoreFailures = false
 	maxWarnings = 0
 	maxErrors = 0
-	configFile = file("checkstyle/checkstyle.xml")
+	configFile = file("config/checkstyle/checkstyle.xml")
 }
 
 java {

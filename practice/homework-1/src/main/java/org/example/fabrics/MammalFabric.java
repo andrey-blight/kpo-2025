@@ -5,7 +5,10 @@ import org.example.domains.Monkey;
 import org.example.domains.Rabbit;
 import org.example.interfaces.InterfaceAnimalFabric;
 import org.example.params.MammalParams;
+import org.springframework.stereotype.Component;
 
+
+@Component
 public class MammalFabric implements InterfaceAnimalFabric<MammalParams> {
 
     public Mammal createAnimal(MammalParams params) {
