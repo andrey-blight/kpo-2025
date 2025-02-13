@@ -7,6 +7,8 @@ import org.example.params.PredatorParams;
 import org.example.services.AnimalStorage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -14,8 +16,10 @@ import java.io.PrintStream;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
+@SpringBootTest
 public class AnimalStorageTests {
+    @Autowired
+    private Clinic clinic;
 
     @Test
     @DisplayName("Тест создания кролика")

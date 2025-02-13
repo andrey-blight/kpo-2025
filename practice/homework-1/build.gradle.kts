@@ -15,6 +15,7 @@ repositories {
 dependencies {
     // Spring Boot Starter Test (без версии!)
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation("org.springframework.boot:spring-boot-starter")
 
     // JUnit 5
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
