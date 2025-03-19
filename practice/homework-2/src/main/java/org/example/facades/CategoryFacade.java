@@ -2,16 +2,16 @@ package org.example.facades;
 
 import org.example.entities.Category;
 import org.example.enums.CategoryType;
-import org.example.factories.CommandFactory;
+import org.example.factories.CommandCategoryFactory;
 import org.example.interfaces.Command;
 import org.example.interfaces.ResultCommand;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CategoryFacade {
-    private final CommandFactory commandFactory;
+    private final CommandCategoryFactory commandFactory;
 
-    public CategoryFacade(CommandFactory commandFactory) {
+    public CategoryFacade(CommandCategoryFactory commandFactory) {
         this.commandFactory = commandFactory;
     }
 

@@ -14,10 +14,10 @@ import org.example.services.CategoryService;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CommandFactory {
+public class CommandCategoryFactory {
     private final CategoryService categoryService;
 
-    public CommandFactory(CategoryService categoryService) {
+    public CommandCategoryFactory(CategoryService categoryService) {
         this.categoryService = categoryService;
     }
 
