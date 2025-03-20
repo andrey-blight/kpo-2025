@@ -21,39 +21,41 @@ public class CommandCategoryFactory {
         this.categoryService = categoryService;
     }
 
-    public ResultCommand<Category> createCategoryCommand(String categoryName, CategoryType categoryType, Boolean with_runtime) {
-        ResultCommand<Category> command = new CreateCategoryCommand(categoryService, categoryName, categoryType);
-
-        if (with_runtime) {
-            return new RuntimeResultDecorator<>(command);
-        }
-        return command;
-    }
-
-    public Command deleteCategoryCommand(Long id, Boolean with_runtime) {
-        Command command = new DeleteCategoryCommand(categoryService, id);
-
+    private Command getFinalCommand(Command command, Boolean with_runtime) {
         if (with_runtime) {
             return new RuntimeDecorator(command);
         }
         return command;
     }
 
-    public ResultCommand<Category> updateCategoryCommand(Long id, String name, CategoryType categoryType, Boolean with_runtime) {
-        ResultCommand<Category> command = new UpdateCategoryCommand(categoryService, id, name, categoryType);
-
+    private ResultCommand<Category> getFinalCommand(ResultCommand<Category> command, Boolean with_runtime) {
         if (with_runtime) {
             return new RuntimeResultDecorator<>(command);
         }
         return command;
     }
 
+    public ResultCommand<Category> createCategoryCommand(String categoryName, CategoryType categoryType, Boolean with_runtime) {
+        ResultCommand<Category> command = new CreateCategoryCommand(categoryService, categoryName, categoryType);
+
+        return getFinalCommand(command, with_runtime);
+    }
+
+    public Command deleteCategoryCommand(Long id, Boolean with_runtime) {
+        Command command = new DeleteCategoryCommand(categoryService, id);
+
+        return getFinalCommand(command, with_runtime);
+    }
+
+    public ResultCommand<Category> updateCategoryCommand(Long id, String name, CategoryType categoryType, Boolean with_runtime) {
+        ResultCommand<Category> command = new UpdateCategoryCommand(categoryService, id, name, categoryType);
+
+        return getFinalCommand(command, with_runtime);
+    }
+
     public ResultCommand<Category> getCategoryCommand(Long id, Boolean with_runtime) {
         ResultCommand<Category> command = new GetCategoryCommand(categoryService, id);
 
-        if (with_runtime) {
-            return new RuntimeResultDecorator<>(command);
-        }
-        return command;
+        return getFinalCommand(command, with_runtime);
     }
 }

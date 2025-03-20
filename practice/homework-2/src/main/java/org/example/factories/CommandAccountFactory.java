@@ -20,39 +20,41 @@ public class CommandAccountFactory {
         this.accountService = accountRepository;
     }
 
-    public ResultCommand<Account> createAccountCommand(String name, Long balance, Boolean with_runtime) {
-        ResultCommand<Account> command = new CreateAccountCommand(accountService, name, balance);
-
-        if (with_runtime) {
-            return new RuntimeResultDecorator<>(command);
-        }
-        return command;
-    }
-
-    public Command deleteAccountCommand(Long id, Boolean with_runtime) {
-        Command command = new DeleteAccountCommand(accountService, id);
-
+    private Command getFinalCommand(Command command, Boolean with_runtime) {
         if (with_runtime) {
             return new RuntimeDecorator(command);
         }
         return command;
     }
 
-    public ResultCommand<Account> updateAccountCommand(Long id, String name, Long balance, Boolean with_runtime) {
-        ResultCommand<Account> command = new UpdateAccountCommand(accountService, id, name, balance);
-
+    private ResultCommand<Account> getFinalCommand(ResultCommand<Account> command, Boolean with_runtime) {
         if (with_runtime) {
             return new RuntimeResultDecorator<>(command);
         }
         return command;
     }
 
+    public ResultCommand<Account> createAccountCommand(String name, Long balance, Boolean with_runtime) {
+        ResultCommand<Account> command = new CreateAccountCommand(accountService, name, balance);
+
+        return getFinalCommand(command, with_runtime);
+    }
+
+    public Command deleteAccountCommand(Long id, Boolean with_runtime) {
+        Command command = new DeleteAccountCommand(accountService, id);
+
+        return getFinalCommand(command, with_runtime);
+    }
+
+    public ResultCommand<Account> updateAccountCommand(Long id, String name, Long balance, Boolean with_runtime) {
+        ResultCommand<Account> command = new UpdateAccountCommand(accountService, id, name, balance);
+
+        return getFinalCommand(command, with_runtime);
+    }
+
     public ResultCommand<Account> getAccountCommand(Long id, Boolean with_runtime) {
         ResultCommand<Account> command = new GetAccountCommand(accountService, id);
 
-        if (with_runtime) {
-            return new RuntimeResultDecorator<>(command);
-        }
-        return command;
+        return getFinalCommand(command, with_runtime);
     }
 }
