@@ -91,9 +91,8 @@ class CarControllerTest {
 
         CarResponse response = objectMapper.readValue(responseJson, CarResponse.class);
         assertAll(
-                () -> assertNotNull(response.vin(), "VIN должен быть присвоен"),
-                () -> assertEquals(EngineTypes.PEDAL.name(), response.engineType(),
-                        "Тип двигателя должен быть PEDAL")
+                () -> assertNotNull("VIN должен быть присвоен", response.vin()),
+                () -> assertEquals("Тип двигателя должен быть PEDAL", EngineTypes.PEDAL.name(), response.engineType())
         );
     }
 }
