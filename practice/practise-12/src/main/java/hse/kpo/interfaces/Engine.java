@@ -3,13 +3,11 @@ package hse.kpo.interfaces;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import hse.kpo.domains.Customer;
 import hse.kpo.domains.HandEngine;
 import hse.kpo.domains.LevitationEngine;
 import hse.kpo.domains.PedalEngine;
+import hse.kpo.domains.customers.Customer;
 import hse.kpo.enums.ProductionTypes;
-import jakarta.persistence.Entity;
-import lombok.ToString;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,

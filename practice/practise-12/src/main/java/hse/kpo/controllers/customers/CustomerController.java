@@ -1,10 +1,11 @@
 package hse.kpo.controllers.customers;
 
-import hse.kpo.domains.Customer;
+import hse.kpo.domains.cars.Car;
+import hse.kpo.domains.customers.Customer;
 import hse.kpo.dto.request.CustomerRequest;
 import hse.kpo.dto.response.CustomerResponse;
 import hse.kpo.facade.Hse;
-import hse.kpo.storages.CustomerStorage;
+import hse.kpo.services.customers.CustomerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 @Tag(name = "Клиенты", description = "Управление клиентами")
 public class CustomerController {
     private final Hse hseFacade;
-    private final CustomerStorage customerStorage;
+    private final CustomerService customerService;
 
     @PostMapping
     @Operation(summary = "Создать клиента")
@@ -41,12 +42,7 @@ public class CustomerController {
     public ResponseEntity<CustomerResponse> updateCustomer(
             @PathVariable String name,
             @Valid @RequestBody CustomerRequest request) {
-        Customer updatedCustomer = Customer.builder()
-                .name(name)
-                .legPower(request.getLegPower())
-                .handPower(request.getHandPower())
-                .iq(request.getIq())
-                .build();
+        Customer updatedCustomer = new Customer(name, request.getLegPower(), request.getHandPower(), request.getIq());
         hseFacade.updateCustomer(updatedCustomer);
         return ResponseEntity.ok(convertToResponse(updatedCustomer));
     }
@@ -61,13 +57,13 @@ public class CustomerController {
     @GetMapping
     @Operation(summary = "Получить всех клиентов")
     public List<CustomerResponse> getAllCustomers() {
-        return customerStorage.getCustomers().stream()
+        return customerService.getCustomers().stream()
                 .map(this::convertToResponse)
                 .collect(Collectors.toList());
     }
 
     private Customer findCustomerByName(String name) {
-        return customerStorage.getCustomers().stream()
+        return customerService.getCustomers().stream()
                 .filter(c -> c.getName().equals(name))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Клиент не найден"));
@@ -79,7 +75,7 @@ public class CustomerController {
                 customer.getLegPower(),
                 customer.getHandPower(),
                 customer.getIq(),
-                customer.getCar() != null ? customer.getCar().getVin() : null,
+                customer.getCars() != null ? customer.getCars().stream().map(Car::getVin).collect(Collectors.toList()) : null,
                 customer.getCatamaran() != null ? customer.getCatamaran().getVin() : null
         );
     }

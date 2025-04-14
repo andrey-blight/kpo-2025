@@ -2,9 +2,9 @@ package hse.kpo.facade;
 
 import hse.kpo.domains.catamarans.Catamaran;
 import hse.kpo.domains.CatamaranWithWheels;
-import hse.kpo.domains.Customer;
 import hse.kpo.domains.Report;
 import hse.kpo.domains.cars.Car;
+import hse.kpo.domains.customers.Customer;
 import hse.kpo.enums.ReportFormat;
 import hse.kpo.export.transport.TransportExporter;
 import hse.kpo.factories.ReportExporterFactory;
@@ -17,8 +17,8 @@ import hse.kpo.params.PedalEngineParams;
 import hse.kpo.export.reports.ReportExporter;
 import hse.kpo.services.cars.HseCarService;
 import hse.kpo.services.catamarans.HseCatamaranService;
-import hse.kpo.storages.CustomerStorage;
 import hse.kpo.observers.SalesObserver;
+import hse.kpo.services.customers.CustomerService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -36,7 +36,7 @@ import java.util.stream.Stream;
 @Component
 @RequiredArgsConstructor
 public class Hse {
-    private final CustomerStorage customerStorage;
+    private final CustomerService customerService;
     private final HseCarService carService;
     private final HseCatamaranService catamaranService;
     private final SalesObserver salesObserver;
@@ -65,21 +65,16 @@ public class Hse {
      * hse.addCustomer("Анна", 7, 5, 120);
      */
     public void addCustomer(String name, int legPower, int handPower, int iq) {
-        Customer customer = Customer.builder()
-                .name(name)
-                .legPower(legPower)
-                .handPower(handPower)
-                .iq(iq)
-                .build();
-        customerStorage.addCustomer(customer);
+        Customer customer = new Customer(name, legPower, handPower, iq);
+        customerService.addCustomer(customer);
     }
 
     public boolean updateCustomer(Customer updatedCustomer) {
-        return customerStorage.updateCustomer(updatedCustomer);
+        return customerService.updateCustomer(updatedCustomer);
     }
 
     public boolean deleteCustomer(String name) {
-        return customerStorage.deleteCustomer(name);
+        return customerService.deleteCustomer(name);
     }
 
     /**

@@ -1,23 +1,14 @@
 package hse.kpo.domains.cars;
 
 import hse.kpo.domains.AbstractEngine;
-import hse.kpo.domains.Customer;
 import hse.kpo.domains.HandEngine;
 import hse.kpo.domains.LevitationEngine;
 import hse.kpo.domains.PedalEngine;
+import hse.kpo.domains.customers.Customer;
 import hse.kpo.enums.EngineTypes;
 import hse.kpo.enums.ProductionTypes;
-import hse.kpo.interfaces.Engine;
 import hse.kpo.interfaces.Transport;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -60,7 +51,7 @@ public class Car implements Transport {
         }
         if (engine instanceof LevitationEngine) {
             return EngineTypes.LEVITATION.name();
-        };
+        }
         throw new RuntimeException("Where is engine???");
     }
 
@@ -72,4 +63,8 @@ public class Car implements Transport {
     public String getTransportType() {
         return ProductionTypes.CAR.name();
     }
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer; // Ссылка на владельца
 }

@@ -1,5 +1,6 @@
 package hse.kpo.domains;
 
+import hse.kpo.domains.customers.Customer;
 import hse.kpo.enums.ProductionTypes;
 import hse.kpo.interfaces.Engine;
 import jakarta.persistence.DiscriminatorValue;

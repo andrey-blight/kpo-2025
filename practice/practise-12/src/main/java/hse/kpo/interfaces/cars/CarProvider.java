@@ -1,7 +1,7 @@
 package hse.kpo.interfaces.cars;
 
 import hse.kpo.domains.cars.Car;
-import hse.kpo.domains.Customer;
+import hse.kpo.domains.customers.Customer;
 
 public interface CarProvider {
 

@@ -1,13 +1,12 @@
 package hse.kpo.domains.catamarans;
 
 import hse.kpo.domains.AbstractEngine;
-import hse.kpo.domains.Customer;
 import hse.kpo.domains.HandEngine;
 import hse.kpo.domains.LevitationEngine;
 import hse.kpo.domains.PedalEngine;
+import hse.kpo.domains.customers.Customer;
 import hse.kpo.enums.EngineTypes;
 import hse.kpo.enums.ProductionTypes;
-import hse.kpo.interfaces.Engine;
 import hse.kpo.interfaces.Transport;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;

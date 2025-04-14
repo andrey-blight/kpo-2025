@@ -1,7 +1,7 @@
 package hse.kpo.services.catamarans;
 
-import hse.kpo.domains.Customer;
 import hse.kpo.domains.catamarans.Catamaran;
+import hse.kpo.domains.customers.Customer;
 import hse.kpo.interfaces.CustomerProvider;
 import hse.kpo.interfaces.catamarans.CatamaranFactory;
 import hse.kpo.interfaces.catamarans.CatamaranProvider;

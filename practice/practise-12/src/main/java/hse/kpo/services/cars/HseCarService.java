@@ -1,7 +1,7 @@
 package hse.kpo.services.cars;
 
-import hse.kpo.domains.Customer;
 import hse.kpo.domains.cars.Car;
+import hse.kpo.domains.customers.Customer;
 import hse.kpo.enums.ProductionTypes;
 import hse.kpo.interfaces.cars.CarFactory;
 import hse.kpo.observers.Sales;
@@ -44,12 +44,14 @@ public class HseCarService implements CarProvider{
      */
     @Sales
     public void sellCars() {
-        var customers = customerProvider.getCustomers();
-        customers.stream().filter(customer -> Objects.isNull(customer.getCar()))
+        customerProvider.getCustomers().stream()
+                .filter(customer -> customer.getCars() == null || customer.getCars().isEmpty())
                 .forEach(customer -> {
-                    var car = this.takeCar(customer);
+                    Car car = takeCar(customer);
                     if (Objects.nonNull(car)) {
-                        customer.setCar(car);
+                        customer.getCars().add(car); // Добавляем автомобиль в список клиента
+                        car.setCustomer(customer);   // Устанавливаем ссылку на клиента в автомобиле
+                        carRepository.save(car);     // Сохраняем изменения
                         notifyObserversForSale(customer, ProductionTypes.CAR, car.getVin());
                     } else {
                         log.warn("No car in CarService");

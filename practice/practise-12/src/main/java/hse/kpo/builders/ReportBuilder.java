@@ -1,7 +1,8 @@
 package hse.kpo.builders;
 
-import hse.kpo.domains.Customer;
 import hse.kpo.domains.Report;
+import hse.kpo.domains.customers.Customer;
+
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
