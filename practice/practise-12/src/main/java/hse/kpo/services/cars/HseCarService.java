@@ -45,7 +45,7 @@ public class HseCarService implements CarProvider{
     @Sales
     public void sellCars() {
         customerProvider.getCustomers().stream()
-                .filter(customer -> customer.getCars() == null || customer.getCars().isEmpty())
+                .filter(customer -> customer.getCars() == null && customer.getCars().isEmpty())
                 .forEach(customer -> {
                     Car car = takeCar(customer);
                     if (Objects.nonNull(car)) {
