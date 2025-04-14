@@ -17,7 +17,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
     );
 
     @Query("""
-SELECT * FROM customer
+SELECT с FROM Customer с
 """)
     List<Customer> getCustomers();
 }
