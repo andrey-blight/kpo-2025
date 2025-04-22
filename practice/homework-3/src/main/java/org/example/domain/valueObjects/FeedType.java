@@ -13,4 +13,11 @@ public class FeedType {
     private Long id;
 
     private String name;
+
+    public FeedType(String name) {
+        this.name = name;
+    }
+
+    public FeedType() {
+    }
 }

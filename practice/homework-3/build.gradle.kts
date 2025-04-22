@@ -1,40 +1,51 @@
 plugins {
-    id("java")
-    id("io.freefair.lombok") version "8.6"
-    id("org.springframework.boot") version "3.2.2"  // Подключаем Spring Boot
-    id("io.spring.dependency-management") version "1.1.4" // Управление зависимостями Spring
+    java
+    jacoco
+    id("org.springframework.boot") version "3.4.2"
+    id("io.spring.dependency-management") version "1.1.7"
 }
 
-group = "org.example"
-version = "1.0-SNAPSHOT"
+group = "hse"
+version = "0.0.1-SNAPSHOT"
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom(configurations.annotationProcessor.get())
+    }
+}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    // Spring Boot Data JPA
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-
-    // Драйвер PostgreSQL
-    runtimeOnly("org.postgresql:postgresql")
-
-    // Spring Boot Starter Test (без версии!)
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
     implementation("org.springframework.boot:spring-boot-starter")
 
-    // JUnit 5
-    testImplementation(platform("org.junit:junit-bom:5.10.0"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
+    implementation("org.springframework.boot:spring-boot-starter-web")
 
-    // Lombok (для основного кода и аннотаций)
-    implementation("org.projectlombok:lombok")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    runtimeOnly("org.postgresql:postgresql")
+
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5")
+
+    compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
 
-    // Для тестов
-    testImplementation("org.mockito:mockito-core")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.7.1")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    implementation("org.springframework.boot:spring-boot-starter-aop")
+
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.18.2")
 }
 
-tasks.test {
+tasks.withType<Test> {
     useJUnitPlatform()
 }

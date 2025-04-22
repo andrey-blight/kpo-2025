@@ -23,15 +23,15 @@ public class Animal {
     private String status;
 
     @ManyToOne
-    @JoinColumn(name = "feed_id")
+    @JoinColumn(name = "feed_id", nullable = false)
     private FeedType favoriteFood;
 
     @ManyToOne
-    @JoinColumn(name = "type_id")
+    @JoinColumn(name = "type_id", nullable = false)
     private AnimalType type;
 
     @ManyToOne
-    @JoinColumn(name = "enclosure_id")
+    @JoinColumn(name = "enclosure_id", nullable = true)
     private Enclosure currentEnclosure;
 
     public String feed(FeedType food) {

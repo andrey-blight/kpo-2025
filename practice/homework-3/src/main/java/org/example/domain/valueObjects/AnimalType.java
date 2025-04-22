@@ -13,4 +13,11 @@ public class AnimalType {
     private Long id;
 
     private String name;
+
+    public AnimalType(String name) {
+        this.name = name;
+    }
+
+    public AnimalType() {
+    }
 }
