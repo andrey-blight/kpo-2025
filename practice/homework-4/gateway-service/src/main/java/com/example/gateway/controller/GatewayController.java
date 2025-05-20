@@ -1,25 +1,36 @@
 package com.example.gateway.controller;
 
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.codec.multipart.FilePart;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-
-import java.nio.charset.StandardCharsets;
 
 @RestController
 @RequestMapping("/gateway")
 public class GatewayController {
 
+    private final WebClient storageService = WebClient.builder()
+            .baseUrl("http://localhost:8081")
+            .build();
+
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Mono<String> uploadFile(@RequestPart("file") FilePart filePart) {
-        return filePart.content()
-                .map(dataBuffer -> {
-                    byte[] bytes = new byte[dataBuffer.readableByteCount()];
-                    dataBuffer.read(bytes);
-                    return new String(bytes, StandardCharsets.UTF_8);
-                })
-                .reduce("", (a, b) -> a + b)
-                .map(content -> "Файл получен. Содержимое:\n" + content);
+        return storageService.post()
+                .uri("/storage/upload")
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .body(BodyInserters.fromMultipartData("file", filePart))
+                .retrieve()
+                .bodyToMono(String.class)
+                .onErrorResume(ex ->
+                        Mono.error(new ResponseStatusException(
+                                HttpStatus.BAD_GATEWAY,
+                                "Storage service не доступен",
+                                ex
+                        ))
+                );
     }
 }
