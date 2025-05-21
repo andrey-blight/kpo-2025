@@ -1,5 +1,6 @@
 package com.example.gateway.controller;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,9 +14,12 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/gateway")
 public class GatewayController {
 
-    private final WebClient storageService = WebClient.builder()
-            .baseUrl("http://localhost:8081")
-            .build();
+    private final WebClient storageService;
+
+    public GatewayController(WebClient.Builder webClientBuilder,
+                             @Value("${storage.service.url}") String storageUrl) {
+        this.storageService = webClientBuilder.baseUrl(storageUrl).build();
+    }
 
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Mono<String> uploadFile(@RequestPart("file") FilePart filePart) {

@@ -4,6 +4,10 @@ plugins {
     id 'java'
 }
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     // WebFlux
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
@@ -13,6 +17,8 @@ dependencies {
 
     // Unit tests
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'io.projectreactor:reactor-test'
+    testImplementation 'org.mockito:mockito-core'
 }
 
 java {

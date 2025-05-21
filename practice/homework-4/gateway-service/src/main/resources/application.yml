@@ -7,3 +7,7 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
     enabled: true
+
+storage:
+  service:
+    url: ${STORAGE_SERVICE_URL:http://localhost:8081}
