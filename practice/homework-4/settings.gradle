@@ -1,2 +1,2 @@
 rootProject.name = 'homework-4'
-include 'gateway-service', 'storage-service'
+include 'gateway-service', 'storage-service', 'analytics-service'

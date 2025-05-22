@@ -2,6 +2,7 @@ package com.example.storage.service;
 
 import com.example.storage.entity.FileEntity;
 import com.example.storage.repository.FileRepository;
+import lombok.Setter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,7 +15,8 @@ import java.util.Optional;
 public class FileService {
 
     private final FileRepository fileRepository;
-    private final Path storageDir = Paths.get("file-storage");
+    @Setter
+    private Path storageDir = Paths.get("file-storage");
 
     public FileService(FileRepository fileRepository) throws IOException {
         this.fileRepository = fileRepository;
