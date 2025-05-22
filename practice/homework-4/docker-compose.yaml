@@ -16,3 +16,19 @@ services:
       context: ./storage-service
     ports:
       - "8081:8081"
+
+  db:
+    image: postgres:15
+    container_name: database
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: files_database
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  pgdata:

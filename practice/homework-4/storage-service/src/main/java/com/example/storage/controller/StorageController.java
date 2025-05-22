@@ -1,35 +1,29 @@
 package com.example.storage.controller;
 
-import org.springframework.http.HttpStatus;
+import com.example.storage.entity.FileEntity;
+import com.example.storage.service.FileService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/storage")
 public class StorageController {
 
+    private final FileService fileService;
+
+    public StorageController(FileService fileService) {
+        this.fileService = fileService;
+    }
+
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> uploadFile(@RequestPart("file") byte[] fileBytes) {
+    public ResponseEntity<String> uploadFile(@RequestPart("file") MultipartFile file) {
         try {
-
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hashBytes = digest.digest(fileBytes);
-
-            StringBuilder sb = new StringBuilder();
-            for (byte b : hashBytes) {
-                sb.append(String.format("%02x", b));
-            }
-            String hash = sb.toString();
-
-            return ResponseEntity.ok(hash);
-
-        } catch (NoSuchAlgorithmException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Ошибка при обработке файла");
+            FileEntity savedFile = fileService.uploadFile(file);
+            return ResponseEntity.ok(savedFile.getId().toString());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Ошибка: " + e.getMessage());
         }
     }
 }
