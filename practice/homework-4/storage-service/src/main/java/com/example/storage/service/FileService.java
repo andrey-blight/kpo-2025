@@ -51,6 +51,28 @@ public class FileService {
         return fileRepository.save(fileEntity);
     }
 
+    public Optional<String> getFileContent(int id) {
+        try {
+            Optional<FileEntity> fileOptional = fileRepository.findById((long) id);
+            if (fileOptional.isEmpty()) {
+                return Optional.empty();
+            }
+
+            FileEntity file = fileOptional.get();
+            Path path = Paths.get(file.getLocation());
+
+            if (!Files.exists(path)) {
+                return Optional.empty();
+            }
+
+            String content = Files.readString(path);
+            return Optional.of(content);
+
+        } catch (IOException e) {
+            return Optional.empty();
+        }
+    }
+
     private String computeHash(byte[] bytes) throws Exception {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] hashBytes = digest.digest(bytes);
@@ -60,4 +82,5 @@ public class FileService {
         }
         return sb.toString();
     }
+
 }

@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/storage")
 public class StorageController {
@@ -25,5 +27,14 @@ public class StorageController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Ошибка: " + e.getMessage());
         }
+    }
+
+    @GetMapping("/statistics/{id}")
+    public ResponseEntity<Optional<String>> getFile(@PathVariable int id) {
+        Optional<String> data = fileService.getFileContent(id);
+        if (data.isPresent()) {
+            return ResponseEntity.ok(data);
+        }
+        return ResponseEntity.notFound().build();
     }
 }
