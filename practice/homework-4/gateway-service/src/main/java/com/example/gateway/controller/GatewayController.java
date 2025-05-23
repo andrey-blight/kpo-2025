@@ -1,6 +1,8 @@
 package com.example.gateway.controller;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -36,5 +38,20 @@ public class GatewayController {
                                 ex
                         ))
                 );
+    }
+
+    @GetMapping("/statistics/{id}")
+    public Mono<ResponseEntity<String>> getFileStatistics(@PathVariable int id) {
+        return storageService.get()
+                .uri("/storage/statistics/{id}", id)
+                .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError,
+                        response -> Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Файл не найден")))
+                .onStatus(HttpStatusCode::is5xxServerError,
+                        response -> Mono.error(new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Storage service не доступен")))
+                .bodyToMono(String.class)
+                .map(ResponseEntity::ok)
+                .onErrorResume(ResponseStatusException.class,
+                        ex -> Mono.just(ResponseEntity.status(ex.getStatusCode()).body(ex.getReason())));
     }
 }
