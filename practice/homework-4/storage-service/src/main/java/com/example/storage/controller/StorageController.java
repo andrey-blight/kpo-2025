@@ -29,8 +29,8 @@ public class StorageController {
         }
     }
 
-    @GetMapping("/statistics/{id}")
-    public ResponseEntity<Optional<String>> getFile(@PathVariable int id) {
+    @GetMapping("/content/{id}")
+    public ResponseEntity<Optional<String>> getFileContent(@PathVariable int id) {
         Optional<String> data = fileService.getFileContent(id);
         if (data.isPresent()) {
             return ResponseEntity.ok(data);

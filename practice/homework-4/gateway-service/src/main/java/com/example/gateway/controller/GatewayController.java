@@ -17,10 +17,13 @@ import reactor.core.publisher.Mono;
 public class GatewayController {
 
     private final WebClient storageService;
+    private final WebClient analyticsService;
 
     public GatewayController(WebClient.Builder webClientBuilder,
-                             @Value("${storage.service.url}") String storageUrl) {
+                             @Value("${storage.service.url}") String storageUrl,
+                             @Value("${analytics.service.url}") String analyticsUrl) {
         this.storageService = webClientBuilder.baseUrl(storageUrl).build();
+        this.analyticsService = webClientBuilder.baseUrl(analyticsUrl).build();
     }
 
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -40,15 +43,30 @@ public class GatewayController {
                 );
     }
 
-    @GetMapping("/statistics/{id}")
-    public Mono<ResponseEntity<String>> getFileStatistics(@PathVariable int id) {
+    @GetMapping("/content/{id}")
+    public Mono<ResponseEntity<String>> getFileContent(@PathVariable int id) {
         return storageService.get()
-                .uri("/storage/statistics/{id}", id)
+                .uri("/storage/content/{id}", id)
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError,
                         response -> Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Файл не найден")))
                 .onStatus(HttpStatusCode::is5xxServerError,
                         response -> Mono.error(new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Storage service не доступен")))
+                .bodyToMono(String.class)
+                .map(ResponseEntity::ok)
+                .onErrorResume(ResponseStatusException.class,
+                        ex -> Mono.just(ResponseEntity.status(ex.getStatusCode()).body(ex.getReason())));
+    }
+
+    @GetMapping("/statistics/{id}")
+    public Mono<ResponseEntity<String>> getFileStatistics(@PathVariable int id) {
+        return analyticsService.get()
+                .uri("/analytics/statistics/{id}", id)
+                .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError,
+                        response -> Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Файл не найден")))
+                .onStatus(HttpStatusCode::is5xxServerError,
+                        response -> Mono.error(new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Analytics service не доступен")))
                 .bodyToMono(String.class)
                 .map(ResponseEntity::ok)
                 .onErrorResume(ResponseStatusException.class,
