@@ -4,20 +4,32 @@ import com.example.analytics.entity.StatisticEntity;
 import com.example.analytics.repository.StatisticRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Optional;
 
 @Service
 public class AnalyticsService {
     private final StatisticRepository statisticRepository;
     private final WebClient storageService;
+    private final WebClient wordCloudService;
+    private final Path storageDir = Paths.get("file-storage");
 
-    public AnalyticsService(WebClient.Builder builder, @Value("${storage.service.url}") String baseUrl, StatisticRepository statisticRepository) {
+    public AnalyticsService(WebClient.Builder builder, @Value("${storage.service.url}") String baseUrl, StatisticRepository statisticRepository) throws IOException {
         this.storageService = builder.baseUrl(baseUrl).build();
+        this.wordCloudService = WebClient.builder().baseUrl("https://quickchart.io").build();
         this.statisticRepository = statisticRepository;
+        Files.createDirectories(storageDir);
     }
 
     private int countWords(String text) {
@@ -36,12 +48,20 @@ public class AnalyticsService {
         if (textOptional.isEmpty()) {
             return null;
         }
+
         String text = textOptional.get();
         int wordCount = countWords(text);
         int charsCount = text.length();
 
+        Optional<String> locationOptional = this.getWordCloud(id, text);
+        if (locationOptional.isEmpty()) {
+            return null;
+        }
+        String location = locationOptional.get();
+
         StatisticEntity statisticEntity = new StatisticEntity();
         statisticEntity.setId((long) id);
+        statisticEntity.setLocation(location);
         statisticEntity.setCharsCount(charsCount);
         statisticEntity.setWordCount(wordCount);
 
@@ -66,6 +86,32 @@ public class AnalyticsService {
 
             return Optional.ofNullable(result);
         } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+
+    public Optional<String> getWordCloud(int id, String text) {
+        try {
+            String encodedText = URLEncoder.encode(text, StandardCharsets.UTF_8);
+            byte[] imageBytes = wordCloudService.get()
+                    .uri(uriBuilder -> uriBuilder
+                            .path("/wordcloud")
+                            .queryParam("text", encodedText)
+                            .build())
+                    .accept(MediaType.IMAGE_PNG)
+                    .retrieve()
+                    .bodyToMono(byte[].class)
+                    .block();
+
+            if (imageBytes == null || imageBytes.length == 0) {
+                return Optional.empty();
+            }
+
+            Path imagePath = storageDir.resolve(id + ".jpg");
+            Files.write(imagePath, imageBytes, StandardOpenOption.CREATE);
+
+            return Optional.of(imagePath.toAbsolutePath().toString());
+        } catch (IOException e) {
             return Optional.empty();
         }
     }

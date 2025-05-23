@@ -16,4 +16,6 @@ public class StatisticEntity {
     private int wordCount;
 
     private int charsCount;
+
+    private String location;
 }
