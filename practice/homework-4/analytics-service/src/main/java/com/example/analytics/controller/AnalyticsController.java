@@ -1,10 +1,10 @@
 package com.example.analytics.controller;
 
+import com.example.analytics.entity.StatisticEntity;
 import com.example.analytics.service.AnalyticsService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
 
 @RestController
 @RequestMapping("/analytics")
@@ -17,13 +17,13 @@ public class AnalyticsController {
     }
 
     @GetMapping("/statistics/{id}")
-    public ResponseEntity<Map<String, Integer>> getStatistics(@PathVariable int id) {
-        Map<String, Integer> stats = analyticsService.calculateStatistics(id);
+    public ResponseEntity<StatisticEntity> getStatistics(@PathVariable int id) {
+        StatisticEntity response = analyticsService.calculateStatistics(id);
 
-        if (stats == null) {
+        if (response == null) {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(stats);
+        return ResponseEntity.ok(response);
     }
 }

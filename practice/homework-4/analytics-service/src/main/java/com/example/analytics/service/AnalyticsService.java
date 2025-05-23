@@ -1,21 +1,23 @@
 package com.example.analytics.service;
 
+import com.example.analytics.entity.StatisticEntity;
+import com.example.analytics.repository.StatisticRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
 public class AnalyticsService {
+    private final StatisticRepository statisticRepository;
     private final WebClient storageService;
 
-    public AnalyticsService(WebClient.Builder builder, @Value("${storage.service.url}") String baseUrl) {
+    public AnalyticsService(WebClient.Builder builder, @Value("${storage.service.url}") String baseUrl, StatisticRepository statisticRepository) {
         this.storageService = builder.baseUrl(baseUrl).build();
+        this.statisticRepository = statisticRepository;
     }
 
     private int countWords(String text) {
@@ -24,7 +26,11 @@ public class AnalyticsService {
         return words.length;
     }
 
-    public Map<String, Integer> calculateStatistics(int id) {
+    public StatisticEntity calculateStatistics(int id) {
+
+        if (statisticRepository.findById((long) id).isPresent()) {
+            return statisticRepository.findById((long) id).get();
+        }
 
         Optional<String> textOptional = getTextById(id);
         if (textOptional.isEmpty()) {
@@ -34,10 +40,12 @@ public class AnalyticsService {
         int wordCount = countWords(text);
         int charsCount = text.length();
 
-        Map<String, Integer> result = new HashMap<>();
-        result.put("word_count", wordCount);
-        result.put("chars_count", charsCount);
-        return result;
+        StatisticEntity statisticEntity = new StatisticEntity();
+        statisticEntity.setId((long) id);
+        statisticEntity.setCharsCount(charsCount);
+        statisticEntity.setWordCount(wordCount);
+
+        return statisticRepository.save(statisticEntity);
     }
 
     private Optional<String> getTextById(int id) {
