@@ -1,22 +1,6 @@
 version: '3.8'
 
 services:
-  gateway:
-    build:
-      context: ./gateway-service
-    ports:
-      - "8080:8080"
-    depends_on:
-      - storage
-    environment:
-      STORAGE_SERVICE_URL: http://storage:8081
-
-  storage:
-    build:
-      context: ./storage-service
-    ports:
-      - "8081:8081"
-
   db:
     image: postgres:15
     container_name: database
