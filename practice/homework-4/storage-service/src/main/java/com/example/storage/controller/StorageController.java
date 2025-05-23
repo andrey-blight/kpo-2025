@@ -30,11 +30,8 @@ public class StorageController {
     }
 
     @GetMapping("/content/{id}")
-    public ResponseEntity<Optional<String>> getFileContent(@PathVariable int id) {
+    public ResponseEntity<String> getFileContent(@PathVariable int id) {
         Optional<String> data = fileService.getFileContent(id);
-        if (data.isPresent()) {
-            return ResponseEntity.ok(data);
-        }
-        return ResponseEntity.notFound().build();
+        return data.map(s -> ResponseEntity.ok().contentType(MediaType.TEXT_PLAIN).body(s)).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
