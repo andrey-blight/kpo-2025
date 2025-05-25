@@ -9,6 +9,7 @@
     1) POST /upload -> storage /upload.
     2) GET /content/{id} -> storage /content/{id}
     3) GET /statistics/{id} -> analytics /statistics/{id}
+    4) GET /word_cloud/{id} -> analytics /word_cloud/{id}
 
 2) Storage - сервис для хранения файлов и проверки на дубликаты. Сервис работает по адресу localhost:8081
 
@@ -22,6 +23,7 @@
    Доступные методы:
     1) GET /statistics/{id} -> Возвращает статистику по файлу. А именно кол-во слов и кол-во букв. Также генерирует
        картинку облака слов и сохраняет его в файловое хранилище.
+    2) GET /word_cloud/{id} -> Возвращает svg картинку с облаком слов.
 
 Для каждого сервиса хранится swagger по адресу:
 

@@ -72,4 +72,22 @@ public class GatewayController {
                 .onErrorResume(ResponseStatusException.class,
                         ex -> Mono.just(ResponseEntity.status(ex.getStatusCode()).body(ex.getReason())));
     }
+
+    @GetMapping("/word_cloud/{id}")
+    public Mono<ResponseEntity<String>> getFileStatisticsSvg(@PathVariable int id) {
+        return analyticsService.get()
+                .uri("/analytics/word_cloud/{id}", id)
+                .accept(MediaType.valueOf("image/svg+xml"))
+                .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError,
+                        response -> Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "SVG-файл не найден")))
+                .onStatus(HttpStatusCode::is5xxServerError,
+                        response -> Mono.error(new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Analytics service не доступен")))
+                .bodyToMono(String.class)
+                .map(svg -> ResponseEntity.ok()
+                        .contentType(MediaType.valueOf("image/svg+xml"))
+                        .body(svg))
+                .onErrorResume(ResponseStatusException.class,
+                        ex -> Mono.just(ResponseEntity.status(ex.getStatusCode()).body(ex.getReason())));
+    }
 }
