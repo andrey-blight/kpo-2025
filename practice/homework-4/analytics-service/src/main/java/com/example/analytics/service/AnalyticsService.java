@@ -3,8 +3,9 @@ package com.example.analytics.service;
 import com.example.analytics.entity.StatisticEntity;
 import com.example.analytics.repository.StatisticRepository;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.MediaType;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -66,6 +67,28 @@ public class AnalyticsService {
         statisticEntity.setWordCount(wordCount);
 
         return statisticRepository.save(statisticEntity);
+    }
+
+    public Resource getImage(int id) {
+        try {
+            Optional<StatisticEntity> statisticEntityOptional = statisticRepository.findById((long) id);
+
+            if (statisticEntityOptional.isEmpty()) {
+                return null;
+            }
+
+            String fileLocation = statisticEntityOptional.get().getLocation();
+            Path filePath = Paths.get(fileLocation);
+            System.out.println("Попытка прочитать файл по пути: " + filePath.toAbsolutePath());
+
+            if (!Files.exists(filePath)) {
+                return null;
+            }
+            return new FileSystemResource(filePath.toFile());
+
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     private Optional<String> getTextById(int id) {
