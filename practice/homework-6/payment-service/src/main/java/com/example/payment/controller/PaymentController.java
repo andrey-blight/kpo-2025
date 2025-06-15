@@ -20,7 +20,7 @@ public class PaymentController {
     }
 
 
-    @PostMapping
+    @PostMapping("/account")
     public ResponseEntity<AccountEntity> createAccount(@RequestBody CreateAccountDto request) {
         AccountEntity result = paymentService.createAccount(request.getUserId());
 
@@ -29,5 +29,16 @@ public class PaymentController {
         }
 
         return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/account/{user_id}")
+    public ResponseEntity<AccountEntity> getImageById(@PathVariable int user_id) {
+        AccountEntity response = paymentService.getAccount(user_id);
+
+        if (response == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok().body(response);
     }
 }

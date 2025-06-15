@@ -14,7 +14,6 @@ public class PaymentService {
 
 
     public AccountEntity createAccount(int userId) {
-
         if (accountRepository.findById(userId).isPresent()) {
             return null;
         }
@@ -23,5 +22,9 @@ public class PaymentService {
         accountEntity.setUserId(userId);
         accountEntity.setBalance(0);
         return accountRepository.save(accountEntity);
+    }
+
+    public AccountEntity getAccount(int userId) {
+        return accountRepository.findById(userId).orElse(null);
     }
 }
