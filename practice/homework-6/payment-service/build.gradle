@@ -26,6 +26,9 @@ dependencies {
 
     // Unit tests
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // MQ
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
 }
 
 java {
