@@ -27,4 +27,15 @@ public class PaymentService {
     public AccountEntity getAccount(int userId) {
         return accountRepository.findById(userId).orElse(null);
     }
+
+    public AccountEntity addIncome(int userId, float amount) {
+        AccountEntity accountEntity = getAccount(userId);
+
+        if (accountEntity == null) {
+            return null;
+        }
+
+        accountEntity.setBalance(accountEntity.getBalance() + amount);
+        return accountRepository.save(accountEntity);
+    }
 }

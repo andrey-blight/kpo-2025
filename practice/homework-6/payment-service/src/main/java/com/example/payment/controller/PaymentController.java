@@ -1,6 +1,7 @@
 package com.example.payment.controller;
 
 import com.example.payment.dto.CreateAccountDto;
+import com.example.payment.dto.CreateIncomeDto;
 import com.example.payment.entity.AccountEntity;
 import com.example.payment.service.PaymentService;
 import org.springframework.http.HttpStatus;
@@ -40,5 +41,16 @@ public class PaymentController {
         }
 
         return ResponseEntity.ok().body(response);
+    }
+
+    @PostMapping("/account/income")
+    public ResponseEntity<AccountEntity> addIncome(@RequestBody CreateIncomeDto request) {
+        AccountEntity result = paymentService.addIncome(request.getUserId(), request.getAmount());
+
+        if (result == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(result);
     }
 }
