@@ -2,12 +2,18 @@ package com.example.payment.controller;
 
 import com.example.payment.dto.CreateAccountDto;
 import com.example.payment.dto.CreateIncomeDto;
+import com.example.payment.dto.PaymentEventDto;
 import com.example.payment.entity.AccountEntity;
+import com.example.payment.service.PaymentProcessingService;
 import com.example.payment.service.PaymentService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.UUID;
 
 
 @RestController
@@ -15,9 +21,11 @@ import org.springframework.web.server.ResponseStatusException;
 public class PaymentController {
 
     private final PaymentService paymentService;
+    private final PaymentProcessingService paymentProcessingService;
 
-    public PaymentController(PaymentService paymentService) {
+    public PaymentController(PaymentService paymentService, PaymentProcessingService paymentProcessingService) {
         this.paymentService = paymentService;
+        this.paymentProcessingService = paymentProcessingService;
     }
 
 
@@ -52,5 +60,23 @@ public class PaymentController {
         }
 
         return ResponseEntity.ok(result);
+    }
+
+
+    @PostMapping("/webhook/payment")
+    public ResponseEntity<?> receivePayment(@RequestBody PaymentEventDto event) {
+        UUID messageId = UUID.randomUUID();
+        ObjectMapper mapper = new ObjectMapper();
+        String payload;
+
+        try {
+            payload = mapper.writeValueAsString(event);
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.badRequest().body("Invalid payload");
+        }
+
+        paymentProcessingService.handlePaymentEvent(messageId, payload);
+
+        return ResponseEntity.ok("Processed");
     }
 }
