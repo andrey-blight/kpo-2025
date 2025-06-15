@@ -1,6 +1,7 @@
 package com.example.order.service;
 
 import com.example.order.entity.OrderEntity;
+import com.example.order.enums.OrderStatus;
 import com.example.order.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ public class OrderService {
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setUserId(userId);
         orderEntity.setAmount(amount);
+        orderEntity.setStatus(OrderStatus.PROCESSING);
         return orderRepository.save(orderEntity);
     }
 

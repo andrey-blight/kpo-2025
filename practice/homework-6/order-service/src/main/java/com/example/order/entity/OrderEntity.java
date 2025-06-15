@@ -1,5 +1,6 @@
 package com.example.order.entity;
 
+import com.example.order.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,4 +24,7 @@ public class OrderEntity {
 
     @Column(nullable = false)
     private float amount;
+
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status; // PROCESSING, FAILED, SUCCEEDED
 }
