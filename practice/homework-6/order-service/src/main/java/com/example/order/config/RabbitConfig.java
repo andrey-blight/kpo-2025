@@ -13,6 +13,8 @@ public class RabbitConfig {
     public static final String EXCHANGE_NAME = "payment-exchange";
     public static final String QUEUE_NAME = "payment-created-queue";
     public static final String ROUTING_KEY = "payment.created";
+    public static final String RESULT_QUEUE_NAME = "payment-result-queue";
+    public static final String RESULT_ROUTING_KEY = "payment.result";
 
     @Bean
     public DirectExchange exchange() {
@@ -27,5 +29,15 @@ public class RabbitConfig {
     @Bean
     public Binding binding(Queue queue, DirectExchange exchange) {
         return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY);
+    }
+
+    @Bean
+    public Queue resultQueue() {
+        return new Queue(RESULT_QUEUE_NAME, true);
+    }
+
+    @Bean
+    public Binding resultBinding(Queue resultQueue, DirectExchange exchange) {
+        return BindingBuilder.bind(resultQueue).to(exchange).with(RESULT_ROUTING_KEY);
     }
 }
