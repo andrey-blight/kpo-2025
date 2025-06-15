@@ -20,5 +20,25 @@ services:
       - "5672:5672"
       - "15672:15672"
 
+  order-service:
+    build:
+      context: ./order-service
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8080"
+    depends_on:
+      - rabbitmq
+      - db
+
+  payment-service:
+    build:
+      context: ./payment-service
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - rabbitmq
+      - db
+
 volumes:
   pgdata:
